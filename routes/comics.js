@@ -1,26 +1,30 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
-const { response } = require("express");
+
+require("dotenv").config();
 
 // const Comics = require("../models/Comics");
 // console.log(Comics);
 
 router.get("/comics", async (req, res) => {
   try {
+    const title = req.query.title || "";
+    const limit = req.query.limit || 100;
+    const skip = req.query.skip || 0;
     const response = await axios.get(
       `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${process.env.API_KEY_MARVEL}`,
       {
         params: {
-          title: req.query.title,
-          limit: req.query.limit,
-          skip: req.query.skip,
+          title: title,
+          limit: limit,
+          skip: skip,
         },
       }
     );
 
     // console.log(response.data.results);
-    res.status(200).json(response.data.results);
+    res.status(200).json(response.data);
 
     let pageRequired = 1;
 
@@ -28,7 +32,7 @@ router.get("/comics", async (req, res) => {
       pageRequired = Number(req.query.page);
     }
   } catch (error) {
-    console.log("catch>>>:", error);
+    res.status(400).json({ message: error.message });
   }
 });
 

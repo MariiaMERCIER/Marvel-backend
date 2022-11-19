@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const axios = require("axios");
 require("dotenv").config();
+const axios = require("axios");
 
 router.get("/characters", async (req, res) => {
   try {
@@ -22,7 +22,7 @@ router.get("/characters", async (req, res) => {
         },
       }
     );
-    console.log(response.data);
+    // console.log(response.data);
     res.status(200).json(response.data);
   } catch (error) {
     console.log(error.message);
@@ -31,7 +31,7 @@ router.get("/characters", async (req, res) => {
 
 router.get("/character/:characterId", async (req, res) => {
   try {
-    console.log(req.params.characterId);
+    // console.log(req.params.characterId);
     const response = await axios.get(
       `https://lereacteur-marvel-api.herokuapp.com/character/${req.params.characterId}?apiKey=${process.env.API_KEY_MARVEL}`
     );

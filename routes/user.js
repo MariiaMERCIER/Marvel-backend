@@ -25,7 +25,7 @@ router.post("/user/signup", async (req, res) => {
     const token = uid2(64);
     // console.log(token);
 
-    // console.log(req.body);
+    console.log(req.body);
     const newUser = new User({
       name: req.body.name,
       email: req.body.email,
@@ -41,6 +41,8 @@ router.post("/user/signup", async (req, res) => {
     res
       .status(200)
       .json({ name: newUser.name, email: newUser.email, token: token });
+
+    // console.log({ name: newUser.name, email: newUser.email, token: token });
   } catch ({ error }) {
     // console.log(error);
     res.status(400).json({ message: error.message });

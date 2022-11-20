@@ -1,23 +1,21 @@
 const User = require("../models/User");
 
-const isAuthentificated = async (req, res, next) => {
-  try {
-    const token = req.headers.authorization.replace("Bearer ", "");
-
-    const user = await User.findOne({ token }).select("account");
-    //  username: req.body.username,
-    //  password: req.body.password,
-    // token: token,
-    //};
+const isAuthenticated = async (req, res, next) => {
+  if (req.headers.authorization) {
+    const user = await User.findOne({
+      token: req.headers.authorization.replace("Bearer ", ""),
+    });
 
     if (!user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ error: "Unauthorized" });
+    } else {
+      req.user = user;
+
+      return next();
     }
-    req.user = user;
-    next();
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+  } else {
+    return res.status(401).json({ error: "Unauthorized" });
   }
 };
 
-module.exports = isAuthentificated;
+module.exports = isAuthenticated;

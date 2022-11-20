@@ -20,6 +20,12 @@ app.use(PersonnageRoutes);
 const UserRoutes = require("./routes/user");
 app.use(UserRoutes);
 
+const FavoritesComicsRoutes = require("./routes/favoritesComics");
+app.use(FavoritesComicsRoutes);
+
+const FavoritesCharacterRoutes = require("./routes/favoritesCharacter");
+app.use(FavoritesCharacterRoutes);
+
 app.all("*", (req, res) => {
   res.status(404).send("No page with this name");
 });

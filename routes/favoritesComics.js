@@ -19,7 +19,7 @@ router.post("/favorites/comics", isAuthentificated, async (req, res) => {
       const newComics = new Comics({
         title: req.body.title,
         description: req.body.description,
-        // image: req.body.image,
+        image: req.body.image,
       });
 
       newComics.save();

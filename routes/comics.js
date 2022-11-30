@@ -10,6 +10,7 @@ router.get("/comics", async (req, res) => {
   try {
     const title = req.query.title || "";
     const limit = req.query.limit || 100;
+    const skip = req.query.skip || 0;
 
     const response = await axios.get(
       `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${process.env.API_KEY_MARVEL}`,
@@ -17,6 +18,7 @@ router.get("/comics", async (req, res) => {
         params: {
           title: title,
           limit: limit,
+          skip: skip,
         },
       }
     );
@@ -29,7 +31,7 @@ router.get("/comics", async (req, res) => {
     if (req.query.page) {
       pageRequired = Number(req.query.page);
     }
-    const skip = (Number(req.query.page) - 1) * limit;
+    // const skip = (Number(req.query.page) - 1) * limit;
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

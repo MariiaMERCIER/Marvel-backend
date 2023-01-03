@@ -9,12 +9,18 @@ router.put("/favorites/new", isAuthentificated, async (req, res) => {
   try {
     const userUpdate = await User.findOne({ email: req.body.email });
 
-    // On verifie si notre user est bien connecté
+    const comicsSearch = userUpdate.favoriteComics;
 
-    if (!userUpdate) {
-      return res.status(400).json("You are not connected");
-    }
     if (req.body.title) {
+      // On verifie si le comics n'est pas déjà dans les favoris
+      for (let i = 0; i < comicsSearch.length; i++) {
+        if (comicsSearch[i].title === req.body.title) {
+          return res.status(400).json({
+            message: "This comics has already been in your favorites",
+          });
+        }
+      }
+
       const newChoiceComics = {
         title: req.body.title,
         description: req.body.description || "",
@@ -23,7 +29,18 @@ router.put("/favorites/new", isAuthentificated, async (req, res) => {
       userUpdate.favoriteComics.push(newChoiceComics);
     }
 
+    const charachterSearch = userUpdate.favoriteCharacter;
+
     if (req.body.name) {
+      // On verifie si le personnage n'est pas déjà dans les favoris
+
+      for (let i = 0; i < charachterSearch.length; i++) {
+        if (charachterSearch[i].name === req.body.name) {
+          return res.status(400).json({
+            message: "This character has already been in your favorites",
+          });
+        }
+      }
       const newChoiceCharacter = {
         name: req.body.name,
         description: req.body.description || "",

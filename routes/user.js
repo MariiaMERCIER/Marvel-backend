@@ -18,33 +18,22 @@ router.post("/user/signup", async (req, res) => {
 
     const password = req.body.password;
     const salt = uid2(16);
-    // console.log(salt);
     const hash = sha256(salt + password).toString(encBase64);
-    // console.log(hash);
-
     const token = uid2(64);
-    // console.log(token);
 
-    console.log(req.body);
     const newUser = new User({
       name: req.body.name,
       email: req.body.email,
-
       token: token,
       hash: hash,
       salt: salt,
     });
     await newUser.save();
 
-    // console.log(newUser);
-
     res
       .status(200)
       .json({ name: newUser.name, email: newUser.email, token: token });
-
-    // console.log({ name: newUser.name, email: newUser.email, token: token });
   } catch ({ error }) {
-    // console.log(error);
     res.status(400).json({ message: error.message });
   }
 });

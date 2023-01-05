@@ -26,9 +26,8 @@ router.get("/characters", async (req, res) => {
     if (req.query.page) {
       pageRequired = Number(req.query.page);
     }
-    // const skip = (Number(req.query.page) - 1) * limit;
   } catch (error) {
-    console.log(error.message);
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -39,7 +38,7 @@ router.get("/character/:characterId", async (req, res) => {
     );
     res.status(200).json(response.data);
   } catch (error) {
-    console.log(error.message);
+    res.status(400).json({ message: error.message });
   }
 });
 

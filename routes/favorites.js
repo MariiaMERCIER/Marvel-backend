@@ -51,11 +51,55 @@ router.put("/favorites/new", isAuthentificated, async (req, res) => {
 
     // On rajoute un nouveau comics-favoris à l'user
 
-    userUpdate.save();
+    await userUpdate.save();
 
     res.status(200).json("You have successefully added new favorite");
   } catch (error) {
-    console.log({ massage: error.message });
+    res.status(400).json({ message: error.message });
+  }
+});
+
+router.put("/favorite/delete", isAuthentificated, async (req, res) => {
+  const userUpdate = req.user;
+
+  if (req.body.title) {
+    try {
+      const newFavorites = userUpdate.favoriteComics.filter((favorite) => {
+        return favorite.title !== req.body.title;
+      });
+
+      userUpdate.favoriteComics = newFavorites;
+
+      await userUpdate.save();
+      res
+        .status(200)
+        .json(
+          `The comics ${req.body.title} has been deleted successfully from your favorite`
+        );
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
+  if (req.body.name) {
+    try {
+      const newFavorites = await userUpdate.favoriteCharacter.filter(
+        (favorite) => {
+          return favorite.name !== req.body.name;
+        }
+      );
+
+      userUpdate.favoriteCharacter = newFavorites;
+
+      await userUpdate.save();
+      res
+        .status(200)
+        .json(
+          `The character ${req.body.name} has been deleted successfully from your favorite`
+        );
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
   }
 });
 
@@ -72,7 +116,7 @@ router.get("/favorites", isAuthentificated, async (req, res) => {
       character: user[0].favoriteCharacter,
     });
   } catch (error) {
-    console.log(error.message);
+    res.status(400).json({ message: error.message });
   }
 });
 

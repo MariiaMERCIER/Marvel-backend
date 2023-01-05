@@ -3,9 +3,6 @@ const router = express.Router();
 require("dotenv").config();
 const axios = require("axios");
 
-// const Comics = require("../models/Comics");
-// console.log(Comics);
-
 router.get("/comics", async (req, res) => {
   try {
     const title = req.query.title || "";
@@ -22,7 +19,6 @@ router.get("/comics", async (req, res) => {
         },
       }
     );
-    console.log(response);
 
     res.status(200).json(response.data);
 
@@ -44,7 +40,7 @@ router.get("/comics/:characterId", async (req, res) => {
 
     res.status(200).json(response.data);
   } catch (error) {
-    console.log("catch>>>:", error);
+    res.status(400).json({ message: error.message });
   }
 });
 
